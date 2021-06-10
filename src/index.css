@@ -11,3 +11,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.comment-body {
+  flex: 1 1;
+  border: 1px solid #ddd;
+  border-radius: 0.8rem;
+  padding: 1rem 1.5rem;
+}

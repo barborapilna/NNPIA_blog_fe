@@ -1,25 +1,28 @@
-import logo from './logo.svg';
 import './App.css';
+import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
+import About from "./components/About";
+import Comment from "./components/Comment";
+import React, {useState} from "react";
+import NavbarComponent from "./components/NavbarComponent";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    // eslint-disable-next-line no-undef
+    // const [loggedIN, setLoggedIN] = useState(AuthService.getUserInfo() !== null);
+
+    return (
+        <Router>
+            <div className="App">
+                {/*<NavbarComponent {...{loggedIN}}/>*/}
+
+                <Switch>
+                    <Route path="/about" component={About}/>
+
+                    <Route path="/comment" component={Comment}/>
+
+                </Switch>
+            </div>
+        </Router>
+    );
 }
 
 export default App;
