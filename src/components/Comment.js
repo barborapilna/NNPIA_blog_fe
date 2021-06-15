@@ -6,7 +6,7 @@ const Comment = ({ comment }) => {
 
     return (
         <div>
-            <div className="media mb-3">
+            <div>
                 <div className={"comment-body"}>
                     <small className="float-right text-muted">{moment(lastModifiedDate).format("lll")}</small>
                     <h6 className="mt-0 mb-1 text-muted">{userName}</h6>

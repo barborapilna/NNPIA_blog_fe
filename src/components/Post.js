@@ -12,8 +12,8 @@ export default function Post(props) {
     }
 
     return (
-        <div className="card p-4">
-            {!isLoaded && <h1>Načítání...</h1>}
+        <div>
+            {!isLoaded && <h1>Loading...</h1>}
             {isLoaded && post && <div>
                 <h1>{post.title}</h1>
                 <small>{post.autor} {post.date} #{post.id}</small>

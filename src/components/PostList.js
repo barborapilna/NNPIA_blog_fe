@@ -14,8 +14,8 @@ export default function PostList(props) {
     }
 
     return (
-        <div className="card p-4">
-            <h1>Dostupné články</h1>
+        <div>
+            <h1>Posts</h1>
             <ul>
                 {renderAvailableLinks(postList)}
             </ul>
@@ -35,10 +35,10 @@ function renderAvailableLinks(postList) {
 
 function loadPost(setPostList, setIsLoaded) {
     const postList = [
-        {id: 11, title: "Článek 10"},
-        {id: 22, title: "Článek 20"},
-        {id: 33, title: "Článek 30"},
-        {id: 44, title: "Článek 40"}
+        {id: 11, title: "Post 11"},
+        {id: 22, title: "Post 22"},
+        {id: 33, title: "Post 33"},
+        {id: 44, title: "Post 44"}
     ];
 
     setPostList(postList);

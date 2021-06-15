@@ -2,10 +2,10 @@ import React from 'react';
 
 export default function About() {
     return (
-        <div className="card p-4">
+        <div>
             <h2 className="h1">About</h2>
-            <div className="card-body">
-                <p className="card-text">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Etiam quis quam. Sed
+            <div>
+                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Etiam quis quam. Sed
                     vel lectus. Donec odio tempus molestie, porttitor ut, iaculis quis, sem. Donec quis nibh at felis
                     congue commodo. Nam sed tellus id magna elementum tincidunt. Vestibulum erat nulla, ullamcorper nec,
                     rutrum non, nonummy ac, erat. Class aptent taciti sociosqu ad litora torquent per conubia nostra,

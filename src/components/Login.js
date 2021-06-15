@@ -1,68 +1,136 @@
-import React from 'react';
-import axios from "axios";
-import {WEB_ADDRESS} from "../components/Constants";
+import { Redirect } from "react-router-dom";
+import { useAuth } from "../service/AuthContext";
+import React, { useState } from 'react';
 
-import {useHistory} from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
+export default function Login() {
 
-export default function Login(props) {
-    const history = useHistory();
+    const [isLoggedIn, setLoggedIn] = useState(false);
+    const [isError, setIsError] = useState(false);
+    const [data, setData] = useState({});
+    const { setTokens } = useAuth();
 
-    console.error("LoginProps: ", props);
+    const handleInputChange = (event) => {
+        const target = event.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
+        data[name] = value
+        setData({ ...data })
+    }
+
+    function postLogin(e) {
+        e.preventDefault()
+
+        fetch(`http://localhost:8080/authenticate`,
+            {
+                method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data) // body data type must match "Content-Type" header
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json()
+                }
+                throw new Error(`Unable to get data: ${response.statusText}`)
+            })
+            .then(json => {
+                setTokens(json.token);
+                setLoggedIn(true);
+            })
+            .catch((err) => {
+                setIsError(err.message)
+            })
+
+    }
+
+    if (isLoggedIn) {
+        return <Redirect to="/"/>;
+    }
 
     return (
         <div>
-            <Form>
-                <Form.Group controlId="formLogin">
-                    <Form.Label>User name</Form.Label>
-                    <Form.Control type="userName" placeholder="Enter your user name"/>
-                </Form.Group>
+            <form onSubmit={postLogin}>
+                <input type={"text"} name={"username"} onChange={handleInputChange}/>
+                <input type={"password"} name={"password"} onChange={handleInputChange}/>
+                <button>Login</button>
+                {isError}
+            </form>
 
-                <Form.Group controlId="formBasicPassword">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" placeholder="Enter your password"/>
-                </Form.Group>
-
-                <Button variant="primary" type="login" onClick={userLogIn.bind(null, props.loginMethod, history)}>
-                    Login
-                </Button>
-            </Form>
+            <div>
+                Two users are available
+                <ul>
+                    <li>javainuse - password</li>
+                    <li>javainuseWithRole - password</li>
+                </ul>
+            </div>
         </div>
 
-        // <div className="card p-4">
-        //     <div>Login:
-        //         <input type="text" name="login" id="loginInput" />
-        //     </div>
-        //
-        //     <div>Password:
-        //         <input type="password" name="password" id="passwordInput" />
-        //     </div>
-        //
-        //     <button onClick={userLogIn.bind(null, props.loginMethod, history)}>Přihlásit</button>
-        // </div>
     )
+
 }
 
-function userLogIn(loginMethod, history) {
-    var login = document.getElementById("loginInput").value;
-    var password = document.getElementById("passwordInput").value;
 
-    if (login === "test" && password === "test") {
-        loginMethod(true);
-        history.push('/loggedIn');
-    }
 
-    /*
-    axios.post(WEB_ADDRESS + '/login', {
-        credentials: {
-            login: login,
-            password: password
-        }
-    }).then((response) => {
-        loginMethod(true);
-    }).catch((e) => {
-        console.error("AXIOS ERROR", e);
-    }); */
-}
+
+
+
+
+// import React from 'react';
+// import axios from "axios";
+// import {WEB_ADDRESS} from "../components/Constants";
+//
+// import {useHistory} from 'react-router-dom';
+// import 'bootstrap/dist/css/bootstrap.min.css';
+// import Button from "react-bootstrap/Button";
+// import Form from "react-bootstrap/Form";
+//
+// export default function Login(props) {
+//     const history = useHistory();
+//
+//     console.error("LoginProps: ", props);
+//
+//     return (
+//         <div class="col-xs-1 col-sm-4 center">
+//             <h1>Log in form</h1>
+//             <hr/>
+//             <Form>
+//                 <Form.Group controlId="formLogin">
+//                     <Form.Label>User name</Form.Label>
+//                     <Form.Control type="userName" placeholder="Enter your user name" id="loginInput"/>
+//                 </Form.Group>
+//
+//                 <Form.Group controlId="formBasicPassword">
+//                     <Form.Label>Password</Form.Label>
+//                     <Form.Control type="password" placeholder="Enter your password" id="passwordInput"/>
+//                 </Form.Group>
+//
+//                 <Button variant="primary" type="login" onClick={userLogIn.bind(null, props.loginMethod, history)}>
+//                     Login
+//                 </Button>
+//             </Form>
+//         </div>
+//     )
+// }
+//
+// function userLogIn(loginMethod, history) {
+//     var login = document.getElementById("loginInput").value;
+//     var password = document.getElementById("passwordInput").value;
+//
+//     if (login === "test" && password === "test") {
+//         loginMethod(true);
+//         history.push('/loggedIn');
+//     }
+//
+//     /*
+//     axios.post(WEB_ADDRESS + '/login', {
+//         credentials: {
+//             login: login,
+//             password: password
+//         }
+//     }).then((response) => {
+//         loginMethod(true);
+//     }).catch((e) => {
+//         console.error("AXIOS ERROR", e);
+//     }); */
+// }

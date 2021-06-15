@@ -18,3 +18,9 @@ code {
   border-radius: 0.8rem;
   padding: 1rem 1.5rem;
 }
+
+.center {
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+}

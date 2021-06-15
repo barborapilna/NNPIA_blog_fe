@@ -9,10 +9,14 @@ import Login from "./components/Login";
 import LoggedIn from "./components/LoggedIn";
 import Post from "./components/Post";
 import PostList from "./components/PostList";
+import NewPost from "./components/NewPost";
+import { useAuth } from "./service/AuthContext";
 
 function App() {
     // eslint-disable-next-line no-undef
     // const [loggedIN, setLoggedIN] = useState(AuthService.getUserInfo() !== null);
+
+    const { user } = useAuth()
 
     const [isLoggedIn, setLoggedIn] = useState(false);
     return (
@@ -30,6 +34,7 @@ function App() {
                     <Route path="/comment" component={Comment} />
                     <Route path="/post-list" component={PostList} />
                     <Route path="/post/:postId" component={Post} />
+                    <Route path="/add/post" component={NewPost} />
                     {isLoggedIn && <Route path="/loggedIn" component={LoggedIn} />}
                     <Route path="/" component={Home} />
                 </Switch>
@@ -42,5 +47,6 @@ function userLogOut(setLoggedIn, history) {
     setLoggedIn(false);
     history.push("/");
 }
+
 
 export default App;
