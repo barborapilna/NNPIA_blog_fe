@@ -2,12 +2,11 @@ import React from 'react';
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import { Form, Nav, Button, Navbar } from 'reactstrap'
-// import Navbar from "react-bootstrap/Navbar";
-import {Link} from "react-router-dom";
-//
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import FormControl from "react-bootstrap/FormControl";
 import {useHistory} from 'react-router-dom';
-//
+
 export default function MyNavbar(props) {
     var navItems = [];
 
@@ -69,6 +68,10 @@ export default function MyNavbar(props) {
                         {navItems}
                     </ul>
                 </Nav>
+                <Form inline>
+                    <FormControl type="text" placeholder="Search post title" className="mr-sm-2"/>
+                    <Button variant="outline-info">Search</Button>
+                </Form>
             </Navbar>
         </div>
 

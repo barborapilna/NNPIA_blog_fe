@@ -8,6 +8,7 @@ export default function NewPost(props) {
 
     return (
         <div class="col-xs-1 col-sm-8 center">
+            <br/>
             <h1>Add a new post</h1>
             <hr/>
 
@@ -24,21 +25,6 @@ export default function NewPost(props) {
 
                 <Button variant="primary" type="submit">Submit</Button>
             </Form>
-
-            {/*<form>*/}
-            {/*    <div className="form-group">*/}
-            {/*        <label>Post title</label>*/}
-            {/*        <input type="title" className="form-control" id="postTitle"/>*/}
-            {/*    </div>*/}
-
-            {/*    <div className="form-group">*/}
-            {/*        <label>Write here</label>*/}
-            {/*        <textarea className="form-control" id="postBody" rows="20"></textarea>*/}
-            {/*    </div>*/}
-
-            {/*    <Button variant="primary" type="submit">Submit</Button>*/}
-            {/*</form>*/}
         </div>
-
     )
 }

@@ -50,6 +50,7 @@ export default function Login() {
 
     return (
         <div>
+            <br/>
             <form onSubmit={postLogin}>
                 <input type={"text"} name={"username"} onChange={handleInputChange}/>
                 <input type={"password"} name={"password"} onChange={handleInputChange}/>

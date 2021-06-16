@@ -3,6 +3,7 @@ import React from 'react';
 export default function About() {
     return (
         <div>
+            <br/>
             <h2 className="h1">About</h2>
             <div>
                 <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Etiam quis quam. Sed

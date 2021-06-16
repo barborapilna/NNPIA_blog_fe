@@ -11,6 +11,7 @@ import Post from "./components/Post";
 import PostList from "./components/PostList";
 import NewPost from "./components/NewPost";
 import { useAuth } from "./service/AuthContext";
+import Register from "./components/Register";
 
 function App() {
     // eslint-disable-next-line no-undef
@@ -35,6 +36,7 @@ function App() {
                     <Route path="/post-list" component={PostList} />
                     <Route path="/post/:postId" component={Post} />
                     <Route path="/add/post" component={NewPost} />
+                    <Route path="/register" component={Register} />
                     {isLoggedIn && <Route path="/loggedIn" component={LoggedIn} />}
                     <Route path="/" component={Home} />
                 </Switch>

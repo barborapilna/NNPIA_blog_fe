@@ -13,16 +13,14 @@ export default function Post(props) {
 
     return (
         <div>
+            <br/>
             {!isLoaded && <h1>Loading...</h1>}
             {isLoaded && post && <div>
                 <h1>{post.title}</h1>
-                <small>{post.autor} {post.date} #{post.id}</small>
-                <div>
-                    <small>Perex: {post.perex}</small>
-                </div>
+                <small>{post.author} {post.date} #{post.id}</small>
                 <div>{post.body}</div>
-                <div dangerouslySetInnerHTML={createMarkup(post.body)} />
-                <hr />
+                <div dangerouslySetInnerHTML={createMarkup(post.body)}/>
+                <hr/>
                 <div>
                     {renderComments(post)}
                 </div>
@@ -32,14 +30,14 @@ export default function Post(props) {
 }
 
 function createMarkup(postBody) {
-    return {__html: postBody };
+    return {__html: postBody};
 }
 
 function renderComments(post) {
     const commentsList = [];
 
     post.comments.forEach((comment) => {
-        commentsList.push(<Comment comment={comment} />)
+        commentsList.push(<Comment comment={comment}/>)
     })
 
     return commentsList;
@@ -49,9 +47,8 @@ function loadPost(postId, setPost, setIsLoaded) {
     const testPost = {
         id: postId,
         title: "Článek " + postId,
-        autor: "Franta Vomáčka",
+        author: "Franta Vomáčka",
         date: "9.6.2021 17:15",
-        perex: "Bláboly do perexu pro článkek " + postId,
         body: "<strong style='color: red;'>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nulla quis diam. Etiam ligula pede, sagittis quis, interdum ultricies, scelerisque eu. Nulla pulvinar eleifend sem. Nullam dapibus fermentum ipsum. Integer rutrum, orci vestibulum ullamcorper ultricies, lacus quam ultricies odio, vitae placerat pede sem sit amet enim. Duis risus. Praesent id justo in neque elementum ultrices. Aliquam erat volutpat. Pellentesque arcu. Nam sed tellus id magna elementum tincidunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Nullam at arcu a est sollicitudin euismod. Fusce aliquam vestibulum ipsum. Mauris dolor felis, sagittis at, luctus sed, aliquam non, tellus. Aliquam in lorem sit amet leo accumsan lacinia. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae.</strong>",
         comments: [
             {
