@@ -27,6 +27,10 @@ export default function Post(props) {
             </div>}
         </div>
     );
+
+    // const createMarkup =(postBody) => {
+    //     return {__html: postBody};
+    // }
 }
 
 function createMarkup(postBody) {
@@ -36,12 +40,14 @@ function createMarkup(postBody) {
 function renderComments(post) {
     const commentsList = [];
 
-    post.comments.forEach((comment) => {
-        commentsList.push(<Comment comment={comment}/>)
+    post.comments.map((comment) => {
+        const {id, body} = comment;
+        commentsList.push(<Comment comment={comment} id={id}/>)
     })
 
     return commentsList;
 }
+
 
 function loadPost(postId, setPost, setIsLoaded) {
     const testPost = {
@@ -64,8 +70,34 @@ function loadPost(postId, setPost, setIsLoaded) {
         ]
     };
 
-    setPost(testPost);
-    setIsLoaded(true);
+
+        const request = ({
+        url: 'http://localhost:8080/post/getAll',
+        method: 'GET',
+        headers: new Headers({
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('tokens')
+        })
+    })
+
+    fetch(request.url, request)
+        .then(res => res.json()
+            .then(json => {
+                if (!res.ok) {
+                    return Promise.reject(json);
+                }
+                return json;
+            }))
+        .then(result => {
+                setPost(result);
+                setIsLoaded(true);
+            }
+        )
+
+
+
+
+
 
     /*
     axios.post(WEB_ADDRESS + '/post', {

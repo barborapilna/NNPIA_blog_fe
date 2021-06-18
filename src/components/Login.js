@@ -1,20 +1,22 @@
-import { Redirect } from "react-router-dom";
-import { useAuth } from "../service/AuthContext";
-import React, { useState } from 'react';
+import {Redirect} from "react-router-dom";
+import {useAuth} from "../service/AuthContext";
+import React, {useState} from 'react';
+import {useHistory} from 'react-router-dom';
 
-export default function Login() {
+export default function Login(props) {
 
     const [isLoggedIn, setLoggedIn] = useState(false);
     const [isError, setIsError] = useState(false);
     const [data, setData] = useState({});
-    const { setTokens } = useAuth();
+    const {setTokens} = useAuth();
+    const history = useHistory();
 
     const handleInputChange = (event) => {
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
         data[name] = value
-        setData({ ...data })
+        setData({...data})
     }
 
     function postLogin(e) {
@@ -37,6 +39,7 @@ export default function Login() {
             .then(json => {
                 setTokens(json.token);
                 setLoggedIn(true);
+                return <Redirect to="/"/>;
             })
             .catch((err) => {
                 setIsError(err.message)
@@ -51,30 +54,28 @@ export default function Login() {
     return (
         <div>
             <br/>
+            <h1>Log in form</h1>
+            <hr/>
             <form onSubmit={postLogin}>
-                <input type={"text"} name={"username"} onChange={handleInputChange}/>
-                <input type={"password"} name={"password"} onChange={handleInputChange}/>
+                <div>
+                    <label>User name</label>
+                    <br/>
+                    <input type={"text"} name={"username"} onChange={handleInputChange}/>
+                </div>
+                <br/>
+                <div>
+                    <label>Password</label>
+                    <br/>
+                    <input type={"password"} name={"password"} onChange={handleInputChange}/>
+                </div>
+                <br/>
                 <button>Login</button>
                 {isError}
             </form>
-
-            <div>
-                Two users are available
-                <ul>
-                    <li>javainuse - password</li>
-                    <li>javainuseWithRole - password</li>
-                </ul>
-            </div>
         </div>
-
     )
 
 }
-
-
-
-
-
 
 
 // import React from 'react';
@@ -115,13 +116,13 @@ export default function Login() {
 // }
 //
 // function userLogIn(loginMethod, history) {
-//     var login = document.getElementById("loginInput").value;
-//     var password = document.getElementById("passwordInput").value;
+//     // var login = document.getElementById("loginInput").value;
+//     // var password = document.getElementById("passwordInput").value;
 //
-//     if (login === "test" && password === "test") {
+//     // if (login === "test" && password === "test") {
 //         loginMethod(true);
-//         history.push('/loggedIn');
-//     }
+//         history.push('/');
+//     // }
 //
 //     /*
 //     axios.post(WEB_ADDRESS + '/login', {

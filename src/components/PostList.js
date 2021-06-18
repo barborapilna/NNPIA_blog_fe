@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import axios from "axios";
 import {WEB_ADDRESS} from "../components/Constants";
 import {Link} from "react-router-dom";
@@ -8,13 +8,39 @@ import Button from "react-bootstrap/Button";
 
 export default function PostList(props) {
     const [postList, setPostList] = useState([]);
-    const [isLoaded, setIsLoaded] = useState(false);
+    // const [isLoaded, setIsLoaded] = useState(false);
 
     console.warn("RENDER!");
 
-    if (!isLoaded) {
-        loadPost(setPostList, setIsLoaded);
-    }
+    useEffect(async () => {
+        const request = ({
+            url: 'http://localhost:8080/post/getAll',
+            method: 'GET',
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('tokens')
+            })
+        });
+
+        await fetch(request.url, request)
+            .then(response =>
+                response.json().then(json => {
+                    if (!response.ok) {
+                        return Promise.reject(json)
+                    }
+
+                    return json
+                })
+            )
+            .then(result => {
+                setPostList(result);
+            })
+    }, [])
+
+    //
+    // if (!isLoaded) {
+    //     loadPost(setPostList, setIsLoaded);
+    // }
 
     return (
         <div>
@@ -31,17 +57,18 @@ export default function PostList(props) {
 function renderAvailableLinks(postList) {
     const postLinks = [];
 
-    postList.forEach((post) => {
+    postList.map((post) => {
+        const {id, author, title, body}  = post;
         // postLinks.push(<li><Link className="nav-link" to={"/post/" + post.id}>{post.title}</Link></li>);
         postLinks.push(
             <div>
-                <Card className="text-center">
-                    <Card.Header>Author: {post.author}</Card.Header>
+                <Card id={id} className="text-center">
+                    <Card.Header>Author: {author}</Card.Header>
                     <Card.Body>
-                        <Card.Title>{post.title}</Card.Title>
-                        <Card.Text>{post.body}</Card.Text>
-                        <Link className="nav-link" to={"/post/" + post.id}>
-                        <Button variant="primary">Read</Button>
+                        <Card.Title>{title}</Card.Title>
+                        <Card.Text>{body}</Card.Text>
+                        <Link className="nav-link" to={"/post/" + id}>
+                            <Button variant="primary">Read</Button>
                         </Link>
                     </Card.Body>
                 </Card>
@@ -81,9 +108,6 @@ function loadPost(setPostList, setIsLoaded) {
             body: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nulla quis diam. Etiam ligula pede, sagittis quis, interdum ultricies, scelerisque eu. Nulla pulvinar eleifend sem. Nullam dapibus fermentum ipsum.",
         }
     ];
-
-    setPostList(postList);
-    setIsLoaded(true);
 
     /*
     axios.post(WEB_ADDRESS + '/getPostTitles').then((response) => {

@@ -6,7 +6,7 @@ import React, {useState} from "react";
 import MyNavbar from "./components/MyNavbar";
 import Home from "./components/Home";
 import Login from "./components/Login";
-import LoggedIn from "./components/LoggedIn";
+import ResponsePage from "./components/ResponsePage";
 import Post from "./components/Post";
 import PostList from "./components/PostList";
 import NewPost from "./components/NewPost";
@@ -14,9 +14,6 @@ import { useAuth } from "./service/AuthContext";
 import Register from "./components/Register";
 
 function App() {
-    // eslint-disable-next-line no-undef
-    // const [loggedIN, setLoggedIN] = useState(AuthService.getUserInfo() !== null);
-
     const { user } = useAuth()
 
     const [isLoggedIn, setLoggedIn] = useState(false);
@@ -37,7 +34,7 @@ function App() {
                     <Route path="/post/:postId" component={Post} />
                     <Route path="/add/post" component={NewPost} />
                     <Route path="/register" component={Register} />
-                    {isLoggedIn && <Route path="/loggedIn" component={LoggedIn} />}
+                    {isLoggedIn && <Route path="/response" component={ResponsePage} />}
                     <Route path="/" component={Home} />
                 </Switch>
             </div>

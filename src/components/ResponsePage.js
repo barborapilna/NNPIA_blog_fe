@@ -1,12 +1,12 @@
 import React from 'react';
 
-export default function LoggedIn(props) {
+export default function ResponsePage(props) {
     return (
         <div>
             <br/>
-            <h2>Welcome</h2>
+            <h2>{props.title}</h2>
             <div>
-                You were successfully logged in.
+                {props.message}
             </div>
         </div>
     );
