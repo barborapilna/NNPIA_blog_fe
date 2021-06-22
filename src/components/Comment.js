@@ -1,36 +1,29 @@
-import React from "react";
+import React, {useEffect} from "react";
 import jwt_decode from "jwt-decode";
-import Table from "react-bootstrap/Table";
-import Button from "react-bootstrap/Button";
+import {Button, Card, Form} from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Comment = ({props, comment}) => {
-
     const {id, userName, body} = comment || {};
 
-    const renderCommentOptions = (userName) => {
+    const CustomComment = ({userName, text}) => {
         if (jwt_decode(localStorage.getItem('tokens')).sub === userName) {
             return (
-                <div>
-                    <Table responsive borderless>
-                        <thead>
-                        <tr>
-                            <th><Button variant="primary" onClick={openLinkEdit}>Edit comment</Button></th>
-                            <th><Button variant="primary" onClick={() => removeComment(id)}>Delete comment</Button>
-                            </th>
-                        </tr>
-                        </thead>
-                    </Table>
+                <div className="commentCard">
+                    <span>{text}</span>
+                    <div>
+                        <Button variant="outline-danger" onClick={() => removeComment(id)}>✕</Button>
+                    </div>
                 </div>
-            )
+            );
+        } else {
+            return (
+                <div className="commentCard">
+                    <span>{text}</span>
+                </div>
+            );
         }
-    };
-
-    const openLinkEdit = () => {
-        props.history.push({
-            pathname: '/add/comment',
-            state: {commentID: comment.id}
-        })
-    };
+    }
 
     const removeComment = async (id) => {
         const reqBody = {
@@ -71,13 +64,19 @@ const Comment = ({props, comment}) => {
     };
 
     return (
-        <div>
-            <div>
-                <div className={"comment-body"}>
-                    <h6 className="mt-0 mb-1 text-muted">Comment author: {userName}</h6>
-                    {body}
-                    {renderCommentOptions(userName)}
+        <div className="App">
+            <div className="container">
+                <div>
+                    <Card>
+                        <br/>
+                        <h6 className="mt-0 mb-1 text-muted">Author: {userName}</h6>
+                        <hr/>
+                        <Card.Body>
+                            <CustomComment userName={userName} text={body}/>
+                        </Card.Body>
+                    </Card>
                 </div>
+                <br/>
             </div>
         </div>
     );

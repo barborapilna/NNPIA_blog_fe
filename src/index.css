@@ -29,3 +29,10 @@ h5.absolute {
   position: absolute;
   left: 45%;
 }
+
+.commentCard {
+  align-items: center;
+  display: flex;
+  font-size: 18px;
+  justify-content: space-between;
+}

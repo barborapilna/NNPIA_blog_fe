@@ -12,7 +12,6 @@ import PostList from "./components/PostList";
 import PostForm from "./components/PostForm";
 import { useAuth } from "./service/AuthContext";
 import Register from "./components/Register";
-import CommentForm from "./components/CommentForm";
 import UserProfile from "./components/UserProfile";
 import UserForm from "./components/UserForm";
 
@@ -40,9 +39,8 @@ function App() {
                     <Route path="/about" component={About} />
                     <Route path="/comment" component={Comment} />
                     <Route path="/post-list" component={PostList} />
-                    <Route path="/post" component={Post} />
+                    <Route path="/post/:postId" component={Post} />
                     <Route path="/add/post" component={PostForm} />
-                    <Route path="/add/comment" component={CommentForm} />
                     <Route path="/register" component={Register} />
                     <Route path="/response" component={ResponsePage} />}
                     <Route path="/user-profile" component={UserProfile} />}

@@ -44,9 +44,10 @@ export default function PostList(props) {
             postLinks.push(
                 <div>
                     <Card id={id} className="text-center">
-                        <Card.Header>Author: {author}</Card.Header>
+                        <Card.Header>{title}</Card.Header>
+                        {/*<Card.Header>Author: {author}</Card.Header>*/}
                         <Card.Body>
-                            <Card.Title>{title}</Card.Title>
+                            {/*<Card.Title>{title}</Card.Title>*/}
                             <Card.Text>{body.substring(0,500) + "..."}</Card.Text>
                             {/*<Link className="nav-link" to={"/post/" + id}>*/}
                                 <Button variant="primary" onClick={() => openLink(id)}>Read</Button>
@@ -65,7 +66,7 @@ export default function PostList(props) {
 
     const openLink = (postId) => {
         props.history.push({
-            pathname: '/post',
+            pathname: '/post/' + postId,
             state: {postID: postId}
         })
     };

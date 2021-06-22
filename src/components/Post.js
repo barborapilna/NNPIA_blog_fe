@@ -3,6 +3,33 @@ import Comment from "./Comment";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import jwt_decode from "jwt-decode";
+import {Form} from "react-bootstrap";
+
+function FormComment({addComment}) {
+    const [value, setValue] = React.useState("");
+
+    const handleSubmit = e => {
+        e.preventDefault();
+        if (!value) return;
+        addComment(value);
+        setValue("");
+    };
+
+    return (
+        <div className="col-xs-1 col-sm-9 center">
+            <br/>
+            <Form onSubmit={handleSubmit}>
+                <Form.Group>
+                    <Form.Control type="text" className="input" value={value} onChange={e => setValue(e.target.value)}
+                                  placeholder="Write comment"/>
+                </Form.Group>
+                <Button variant="primary mb-3" type="submit">
+                    Add comment
+                </Button>
+            </Form>
+        </div>
+    );
+}
 
 export default function Post(props) {
     const [post, setPost] = useState([]);
@@ -19,8 +46,6 @@ export default function Post(props) {
                 'Authorization': 'Bearer ' + localStorage.getItem('tokens')
             })
         });
-
-        // alert((jwt_decode(localStorage.getItem('tokens')).sub));
 
         await fetch(requestPost.url, requestPost)
             .then(response =>
@@ -88,13 +113,6 @@ export default function Post(props) {
         }
     };
 
-    const openLinkComment = () => {
-        props.history.push({
-            pathname: '/add/comment',
-            state: {postID: post.id, commentID: -1}
-        })
-    };
-
     const openLinkEdit = () => {
         props.history.push({
             pathname: '/add/post',
@@ -140,6 +158,39 @@ export default function Post(props) {
             })
     };
 
+    const addComment = text => {
+        if (text !== "") {
+            const reqBody = {
+                body: text,
+                postId: props.location.state.postID
+            };
+
+            const request = ({
+                url: 'http://localhost:8080/comment',
+                method: 'POST',
+                headers: new Headers({
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('tokens')
+                }),
+                body: JSON.stringify(reqBody)
+            });
+
+            fetch(request.url, request)
+                .then(response =>
+                    response.json().then(json => {
+                        if (!response.ok) {
+                            return Promise.reject(json)
+                        }
+
+                        return json
+                    })
+                )
+                .then(result => {
+                    window.location.reload()
+                })
+        }
+    };
+
     const {id, userName, title, body} = post;
 
     return (
@@ -158,7 +209,7 @@ export default function Post(props) {
                 {renderComments(comments ? comments : [])}
             </div>
             <br/>
-            <Button variant="primary" onClick={openLinkComment}>Add comment</Button>
+            <FormComment addComment={addComment}/>
         </div>
     );
 }
