@@ -1,7 +1,8 @@
 import {Redirect} from "react-router-dom";
 import {useAuth} from "../service/AuthContext";
 import React, {useState} from 'react';
-import {useHistory} from 'react-router-dom';
+import Button from "react-bootstrap/Button";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function Login(props) {
 
@@ -9,7 +10,6 @@ export default function Login(props) {
     const [isError, setIsError] = useState(false);
     const [data, setData] = useState({});
     const {setTokens} = useAuth();
-    const history = useHistory();
 
     const handleInputChange = (event) => {
         const target = event.target;
@@ -17,7 +17,7 @@ export default function Login(props) {
         const name = target.name;
         data[name] = value
         setData({...data})
-    }
+    };
 
     function postLogin(e) {
         e.preventDefault()
@@ -39,16 +39,14 @@ export default function Login(props) {
             .then(json => {
                 setTokens(json.token);
                 setLoggedIn(true);
-                return <Redirect to="/"/>;
             })
             .catch((err) => {
                 setIsError(err.message)
             })
-
     }
 
     if (isLoggedIn) {
-        return <Redirect to="/"/>;
+        return <Redirect to="/about"/>;
     }
 
     return (
@@ -69,70 +67,11 @@ export default function Login(props) {
                     <input type={"password"} name={"password"} onChange={handleInputChange}/>
                 </div>
                 <br/>
-                <button>Login</button>
+                <Button variant="primary" type="submit">Login</Button>
+                {/*<button>Login</button>*/}
                 {isError}
             </form>
         </div>
     )
 
 }
-
-
-// import React from 'react';
-// import axios from "axios";
-// import {WEB_ADDRESS} from "../components/Constants";
-//
-// import {useHistory} from 'react-router-dom';
-// import 'bootstrap/dist/css/bootstrap.min.css';
-// import Button from "react-bootstrap/Button";
-// import Form from "react-bootstrap/Form";
-//
-// export default function Login(props) {
-//     const history = useHistory();
-//
-//     console.error("LoginProps: ", props);
-//
-//     return (
-//         <div class="col-xs-1 col-sm-4 center">
-//             <h1>Log in form</h1>
-//             <hr/>
-//             <Form>
-//                 <Form.Group controlId="formLogin">
-//                     <Form.Label>User name</Form.Label>
-//                     <Form.Control type="userName" placeholder="Enter your user name" id="loginInput"/>
-//                 </Form.Group>
-//
-//                 <Form.Group controlId="formBasicPassword">
-//                     <Form.Label>Password</Form.Label>
-//                     <Form.Control type="password" placeholder="Enter your password" id="passwordInput"/>
-//                 </Form.Group>
-//
-//                 <Button variant="primary" type="login" onClick={userLogIn.bind(null, props.loginMethod, history)}>
-//                     Login
-//                 </Button>
-//             </Form>
-//         </div>
-//     )
-// }
-//
-// function userLogIn(loginMethod, history) {
-//     // var login = document.getElementById("loginInput").value;
-//     // var password = document.getElementById("passwordInput").value;
-//
-//     // if (login === "test" && password === "test") {
-//         loginMethod(true);
-//         history.push('/');
-//     // }
-//
-//     /*
-//     axios.post(WEB_ADDRESS + '/login', {
-//         credentials: {
-//             login: login,
-//             password: password
-//         }
-//     }).then((response) => {
-//         loginMethod(true);
-//     }).catch((e) => {
-//         console.error("AXIOS ERROR", e);
-//     }); */
-// }

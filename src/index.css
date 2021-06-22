@@ -24,3 +24,8 @@ code {
   width: 50%;
   padding: 10px;
 }
+
+h5.absolute {
+  position: absolute;
+  left: 45%;
+}

@@ -1,112 +1,164 @@
-import React, {useState} from 'react';
-import axios from "axios";
-import {WEB_ADDRESS} from "../components/Constants";
+import React, {useEffect, useState} from 'react';
 import Comment from "./Comment";
+import Button from "react-bootstrap/Button";
+import Table from "react-bootstrap/Table";
+import jwt_decode from "jwt-decode";
 
 export default function Post(props) {
     const [post, setPost] = useState([]);
-    const [isLoaded, setIsLoaded] = useState(false);
+    const [comments, setComments] = useState([]);
 
-    if (!isLoaded) {
-        loadPost(props.match.params.postId, setPost, setIsLoaded);
-    }
+    useEffect(async () => {
+        const postId = props.location.state.postID;
 
-    return (
-        <div>
-            <br/>
-            {!isLoaded && <h1>Loading...</h1>}
-            {isLoaded && post && <div>
-                <h1>{post.title}</h1>
-                <small>{post.author} {post.date} #{post.id}</small>
-                <div>{post.body}</div>
-                <div dangerouslySetInnerHTML={createMarkup(post.body)}/>
-                <hr/>
-                <div>
-                    {renderComments(post)}
-                </div>
-            </div>}
-        </div>
-    );
+        const requestPost = ({
+            url: 'http://localhost:8080/post/' + postId,
+            method: 'GET',
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('tokens')
+            })
+        });
 
-    // const createMarkup =(postBody) => {
-    //     return {__html: postBody};
-    // }
-}
+        // alert((jwt_decode(localStorage.getItem('tokens')).sub));
 
-function createMarkup(postBody) {
-    return {__html: postBody};
-}
+        await fetch(requestPost.url, requestPost)
+            .then(response =>
+                response.json().then(json => {
+                    if (!response.ok) {
+                        return Promise.reject(json)
+                    }
 
-function renderComments(post) {
-    const commentsList = [];
-
-    post.comments.map((comment) => {
-        const {id, body} = comment;
-        commentsList.push(<Comment comment={comment} id={id}/>)
-    })
-
-    return commentsList;
-}
+                    return json
+                })
+            )
+            .then(result => {
+                setPost(result);
+            });
 
 
-function loadPost(postId, setPost, setIsLoaded) {
-    const testPost = {
-        id: postId,
-        title: "Článek " + postId,
-        author: "Franta Vomáčka",
-        date: "9.6.2021 17:15",
-        body: "<strong style='color: red;'>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nulla quis diam. Etiam ligula pede, sagittis quis, interdum ultricies, scelerisque eu. Nulla pulvinar eleifend sem. Nullam dapibus fermentum ipsum. Integer rutrum, orci vestibulum ullamcorper ultricies, lacus quam ultricies odio, vitae placerat pede sem sit amet enim. Duis risus. Praesent id justo in neque elementum ultrices. Aliquam erat volutpat. Pellentesque arcu. Nam sed tellus id magna elementum tincidunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Nullam at arcu a est sollicitudin euismod. Fusce aliquam vestibulum ipsum. Mauris dolor felis, sagittis at, luctus sed, aliquam non, tellus. Aliquam in lorem sit amet leo accumsan lacinia. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae.</strong>",
-        comments: [
-            {
-                id: 1,
-                userName: "Já",
-                body: "Tohle je bezva první komentář"
-            },
-            {
-                id: 2,
-                userName: "Třeba on",
-                body: "Bezva druhý komentář"
-            }
-        ]
+        const requestComments = ({
+            url: 'http://localhost:8080/comments/' + postId,
+            method: 'GET',
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('tokens')
+            })
+        });
+
+        await fetch(requestComments.url, requestComments)
+            .then(response =>
+                response.json().then(json => {
+                    if (!response.ok) {
+                        return Promise.reject(json)
+                    }
+
+                    return json
+                })
+            )
+            .then(result => {
+                setComments(result)
+            })
+
+    }, []);
+
+    const renderComments = (comments) => {
+        const commentsList = [];
+        comments.forEach((comment) => {
+            const {id} = comment;
+            commentsList.push(<Comment props={props} comment={comment} id={id}/>)
+        });
+        return commentsList;
     };
 
+    const renderPostOptions = (userName) => {
+        if (jwt_decode(localStorage.getItem('tokens')).sub === userName) {
+            return (
+                <div>
+                    <Table responsive borderless>
+                        <thead>
+                        <tr>
+                            <th><Button variant="primary" onClick={openLinkEdit}>Edit post</Button></th>
+                            <th><Button variant="primary" onClick={() => removePost(id)}>Delete post</Button></th>
+                        </tr>
+                        </thead>
+                    </Table>
+                </div>
+            )
+        }
+    };
+
+    const openLinkComment = () => {
+        props.history.push({
+            pathname: '/add/comment',
+            state: {postID: post.id, commentID: -1}
+        })
+    };
+
+    const openLinkEdit = () => {
+        props.history.push({
+            pathname: '/add/post',
+            state: {postID: post.id}
+        })
+    };
+
+    const removePost = async (id) => {
+        const reqBody = {
+            id: id
+        };
 
         const request = ({
-        url: 'http://localhost:8080/post/getAll',
-        method: 'GET',
-        headers: new Headers({
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('tokens')
-        })
-    })
+            url: 'http://localhost:8080/post/' + id,
+            method: 'DELETE',
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('tokens')
+            }),
+            body: JSON.stringify(reqBody)
+        });
 
-    fetch(request.url, request)
-        .then(res => res.json()
-            .then(json => {
-                if (!res.ok) {
-                    return Promise.reject(json);
-                }
-                return json;
-            }))
-        .then(result => {
-                setPost(result);
-                setIsLoaded(true);
-            }
-        )
+        await fetch(request.url, request)
+            .then(response =>
+                response.json().then(json => {
+                    if (!response.ok) {
+                        return Promise.reject(json)
+                    }
+                    return json
+                })
+            )
+            .then(result => {
+                props.history.push({
+                    pathname: '/response',
+                    state: {message: "Success!", title: result.message}
+                });
+            })
+            .catch(result => {
+                props.history.push({
+                    pathname: '/response',
+                    state: {title: "ERROR!", message: "Something went wrong."}
+                });
+            })
+    };
 
+    const {id, userName, title, body} = post;
 
-
-
-
-
-    /*
-    axios.post(WEB_ADDRESS + '/post', {
-        postId: postId
-    }).then((response) => {
-        setPost(response.data);
-        setIsLoaded(true);
-    }).catch((e) => {
-        history.push("/post-404/");
-        console.error("AXIOS ERROR", e);
-    }); */
+    return (
+        <div id={id} className="text-center">
+            <br/>
+            <h1>{title}</h1>
+            <br/>
+            <small>Author: {userName}</small>
+            <div>{body}</div>
+            <br/>
+            <div>
+                {renderPostOptions(userName)}
+            </div>
+            <hr/>
+            <div>
+                {renderComments(comments ? comments : [])}
+            </div>
+            <br/>
+            <Button variant="primary" onClick={openLinkComment}>Add comment</Button>
+        </div>
+    );
 }

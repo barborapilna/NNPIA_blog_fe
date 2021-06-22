@@ -9,14 +9,23 @@ import Login from "./components/Login";
 import ResponsePage from "./components/ResponsePage";
 import Post from "./components/Post";
 import PostList from "./components/PostList";
-import NewPost from "./components/NewPost";
+import PostForm from "./components/PostForm";
 import { useAuth } from "./service/AuthContext";
 import Register from "./components/Register";
+import CommentForm from "./components/CommentForm";
+import UserProfile from "./components/UserProfile";
+import UserForm from "./components/UserForm";
 
 function App() {
-    const { user } = useAuth()
-
+    const { removeTokens } = useAuth()
     const [isLoggedIn, setLoggedIn] = useState(false);
+
+    const userLogOut = (setLoggedIn, history) => {
+        setLoggedIn(false);
+        removeTokens();
+        history.push("/");
+    };
+
     return (
         <Router>
             <div className="App">
@@ -31,21 +40,19 @@ function App() {
                     <Route path="/about" component={About} />
                     <Route path="/comment" component={Comment} />
                     <Route path="/post-list" component={PostList} />
-                    <Route path="/post/:postId" component={Post} />
-                    <Route path="/add/post" component={NewPost} />
+                    <Route path="/post" component={Post} />
+                    <Route path="/add/post" component={PostForm} />
+                    <Route path="/add/comment" component={CommentForm} />
                     <Route path="/register" component={Register} />
-                    {isLoggedIn && <Route path="/response" component={ResponsePage} />}
+                    <Route path="/response" component={ResponsePage} />}
+                    <Route path="/user-profile" component={UserProfile} />}
+                    <Route path="/edit/user" component={UserForm} />}
                     <Route path="/" component={Home} />
                 </Switch>
             </div>
         </Router>
     );
-}
 
-function userLogOut(setLoggedIn, history) {
-    setLoggedIn(false);
-    history.push("/");
 }
-
 
 export default App;

@@ -6,6 +6,8 @@ export default function About() {
             <br/>
             <h2 className="h1">About</h2>
             <div>
+                Welcome to multi-tenant blog application.
+                <br/>
                 <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Etiam quis quam. Sed
                     vel lectus. Donec odio tempus molestie, porttitor ut, iaculis quis, sem. Donec quis nibh at felis
                     congue commodo. Nam sed tellus id magna elementum tincidunt. Vestibulum erat nulla, ullamcorper nec,

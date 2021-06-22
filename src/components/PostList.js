@@ -8,9 +8,8 @@ import Button from "react-bootstrap/Button";
 
 export default function PostList(props) {
     const [postList, setPostList] = useState([]);
-    // const [isLoaded, setIsLoaded] = useState(false);
 
-    console.warn("RENDER!");
+    // console.warn("RENDER!");
 
     useEffect(async () => {
         const request = ({
@@ -37,10 +36,39 @@ export default function PostList(props) {
             })
     }, [])
 
-    //
-    // if (!isLoaded) {
-    //     loadPost(setPostList, setIsLoaded);
-    // }
+    const renderAvailableLinks = (postList) => {
+        const postLinks = [];
+
+        postList.map((post) => {
+            const {id, author, title, body}  = post;
+            postLinks.push(
+                <div>
+                    <Card id={id} className="text-center">
+                        <Card.Header>Author: {author}</Card.Header>
+                        <Card.Body>
+                            <Card.Title>{title}</Card.Title>
+                            <Card.Text>{body.substring(0,500) + "..."}</Card.Text>
+                            {/*<Link className="nav-link" to={"/post/" + id}>*/}
+                                <Button variant="primary" onClick={() => openLink(id)}>Read</Button>
+                                {/*<Button variant="primary">Read</Button>*/}
+                            {/*</Link>*/}
+                        </Card.Body>
+                    </Card>
+                    <br/>
+                    <br/>
+                </div>
+            );
+        });
+
+        return postLinks;
+    };
+
+    const openLink = (postId) => {
+        props.history.push({
+            pathname: '/post',
+            state: {postID: postId}
+        })
+    };
 
     return (
         <div>
@@ -52,68 +80,4 @@ export default function PostList(props) {
             </ul>
         </div>
     );
-}
-
-function renderAvailableLinks(postList) {
-    const postLinks = [];
-
-    postList.map((post) => {
-        const {id, author, title, body}  = post;
-        // postLinks.push(<li><Link className="nav-link" to={"/post/" + post.id}>{post.title}</Link></li>);
-        postLinks.push(
-            <div>
-                <Card id={id} className="text-center">
-                    <Card.Header>Author: {author}</Card.Header>
-                    <Card.Body>
-                        <Card.Title>{title}</Card.Title>
-                        <Card.Text>{body}</Card.Text>
-                        <Link className="nav-link" to={"/post/" + id}>
-                            <Button variant="primary">Read</Button>
-                        </Link>
-                    </Card.Body>
-                </Card>
-                <br/>
-                <br/>
-            </div>
-        );
-    });
-
-    return postLinks;
-}
-
-function loadPost(setPostList, setIsLoaded) {
-    const postList = [
-        {
-            id: 11,
-            title: "Title of Post 11",
-            author: "Bara",
-            body: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nulla quis diam. Etiam ligula pede, sagittis quis, interdum ultricies, scelerisque eu. Nulla pulvinar eleifend sem. Nullam dapibus fermentum ipsum.",
-        },
-        {
-            id: 22,
-            title: "Title of Post 22",
-            author: "Bara",
-            body: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nulla quis diam. Etiam ligula pede, sagittis quis, interdum ultricies, scelerisque eu. Nulla pulvinar eleifend sem. Nullam dapibus fermentum ipsum.",
-        },
-        {
-            id: 33,
-            title: "Title of Post 33",
-            author: "Bara",
-            body: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nulla quis diam. Etiam ligula pede, sagittis quis, interdum ultricies, scelerisque eu. Nulla pulvinar eleifend sem. Nullam dapibus fermentum ipsum.",
-        },
-        {
-            id: 44,
-            title: "Title of Post 44",
-            author: "Bara",
-            body: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nulla quis diam. Etiam ligula pede, sagittis quis, interdum ultricies, scelerisque eu. Nulla pulvinar eleifend sem. Nullam dapibus fermentum ipsum.",
-        }
-    ];
-
-    /*
-    axios.post(WEB_ADDRESS + '/getPostTitles').then((response) => {
-        setPostList(response.data);
-        setIsLoaded(true);
-    }).catch((e) => {
-        console.error("AXIOS ERROR", e);
-    }); */
 }
