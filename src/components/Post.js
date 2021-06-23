@@ -186,7 +186,9 @@ export default function Post(props) {
                     })
                 )
                 .then(result => {
-                    window.location.reload()
+                    // const myComments = [...comments, {id: 500, body:text, userName: "barca"}];
+                    // setComments(myComments);
+                    window.location.reload();
                 })
         }
     };
