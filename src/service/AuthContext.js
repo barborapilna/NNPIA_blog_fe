@@ -10,6 +10,12 @@ function getUser(token) {
 
 function AuthProvider({children}) {
 
+    const [authTokens, setAuthTokens] = useState();
+
+    const [state, setState] = useState({
+        status: 'pending'
+    })
+
     const removeTokens = () => {
         localStorage.removeItem("tokens");
 
@@ -23,18 +29,11 @@ function AuthProvider({children}) {
         })
     }
 
-    const [authTokens, setAuthTokens] = useState();
-
-    const [state, setState] = useState({
-        status: 'pending'
-    })
-
     const setTokens = (data) => {
         localStorage.setItem("tokens", data);
         setAuthTokens(data);
         const user = getUser(data);
         setState({
-
                 status: 'success',
                 error: null,
                 user: user,
@@ -43,7 +42,6 @@ function AuthProvider({children}) {
                 removeTokens
             }
         );
-
     }
 
     useEffect(() => {
@@ -57,7 +55,7 @@ function AuthProvider({children}) {
                 removeTokens
             }
         );
-    }, [])
+    }, [setTokens, removeTokens])
 
     return (
         <AuthContext.Provider value={state}>

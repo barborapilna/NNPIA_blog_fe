@@ -10,35 +10,39 @@ export default function PostForm(props) {
     const [body, setBody] = useState([]);
     const [postId, setPostId] = useState(null);
 
-    useEffect(async () => {
-        setPostId(props.location.state.postID);
+    useEffect(() => {
+        async function fetchData() {
+            setPostId(props.location.state.postID);
 
-        if (props.location.state.postID !== -1){
-            const request = ({
-                url: process.env.REACT_APP_BASE_URI + '/post/' + props.location.state.postID,
-                method: 'GET',
-                headers: new Headers({
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('tokens')
-                })
-            });
-
-            await fetch(request.url, request)
-                .then(response =>
-                    response.json().then(json => {
-                        if (!response.ok) {
-                            return Promise.reject(json)
-                        }
-
-                        return json
+            if (props.location.state.postID !== -1) {
+                const request = ({
+                    url: process.env.REACT_APP_BASE_URI + '/post/' + props.location.state.postID,
+                    method: 'GET',
+                    headers: new Headers({
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('tokens')
                     })
-                )
-                .then(result => {
-                    setTitle(result.title);
-                    setBody(result.body);
-                })
+                });
+
+                await fetch(request.url, request)
+                    .then(response =>
+                        response.json().then(json => {
+                            if (!response.ok) {
+                                return Promise.reject(json)
+                            }
+
+                            return json
+                        })
+                    )
+                    .then(result => {
+                        setTitle(result.title);
+                        setBody(result.body);
+                    })
+            }
         }
-    }, [])
+
+        fetchData();
+        }, [props.location.state.postID])
 
     const addPost = () => {
         const reqBody = {

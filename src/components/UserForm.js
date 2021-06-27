@@ -12,35 +12,37 @@ export default function UserForm(props) {
     const [lastName, setLastName] = useState([]);
     const [userId, setUserId] = useState(null);
 
-    useEffect(async () => {
-        setUserId(props.location.state.userID);
+    useEffect(() => {
 
-        const request = ({
-            url: process.env.REACT_APP_BASE_URI + '/user/' + jwt_decode(localStorage.getItem('tokens')).sub,
-            method: 'GET',
-            headers: new Headers({
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('tokens')
-            })
-        });
+        async function fetchData() {
+            setUserId(props.location.state.userID);
 
-        await fetch(request.url, request)
-            .then(response =>
-                response.json().then(json => {
-                    if (!response.ok) {
-                        return Promise.reject(json)
-                    }
-
-                    return json
+            const request = ({
+                url: process.env.REACT_APP_BASE_URI + '/user/' + jwt_decode(localStorage.getItem('tokens')).sub,
+                method: 'GET',
+                headers: new Headers({
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('tokens')
                 })
-            )
-            .then(result => {
-                setUser(result)
-                // setUsername(result.username);
-                // setFistName(result.firstName);
-                // setLastName(result.lastName);
-            })
-    }, [])
+            });
+
+            await fetch(request.url, request)
+                .then(response =>
+                    response.json().then(json => {
+                        if (!response.ok) {
+                            return Promise.reject(json)
+                        }
+
+                        return json
+                    })
+                )
+                .then(result => {
+                    setUser(result)
+                })
+        }
+
+        fetchData();
+    }, [props.location.state.userID])
 
     const editUser = () => {
         const reqBody = {
@@ -79,7 +81,6 @@ export default function UserForm(props) {
                 });
             })
     };
-
 
     const sendUser = (e) => {
         e.preventDefault();

@@ -6,30 +6,34 @@ import jwt_decode from "jwt-decode";
 export default function UserProfile(props) {
     const [user, setUser] = useState([]);
 
-    useEffect(async () => {
-        const request = ({
-            url: process.env.REACT_APP_BASE_URI + '/user/' + jwt_decode(localStorage.getItem('tokens')).sub,
-            method: 'GET',
-            headers: new Headers({
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('tokens')
-            })
-        });
-
-        await fetch(request.url, request)
-            .then(response =>
-                response.json().then(json => {
-                    if (!response.ok) {
-                        return Promise.reject(json)
-                    }
-
-                    return json
+    useEffect(() => {
+        async function fetchData() {
+            const request = ({
+                url: process.env.REACT_APP_BASE_URI + '/user/' + jwt_decode(localStorage.getItem('tokens')).sub,
+                method: 'GET',
+                headers: new Headers({
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('tokens')
                 })
-            )
-            .then(result => {
-                setUser(result);
-            })
-    }, [])
+            });
+
+            await fetch(request.url, request)
+                .then(response =>
+                    response.json().then(json => {
+                        if (!response.ok) {
+                            return Promise.reject(json)
+                        }
+
+                        return json
+                    })
+                )
+                .then(result => {
+                    setUser(result);
+                })
+        }
+
+        fetchData();
+    }, []);
 
     const renderUserOptions = (userName) => {
         if (jwt_decode(localStorage.getItem('tokens')).sub === userName) {

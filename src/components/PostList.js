@@ -6,7 +6,8 @@ import Button from "react-bootstrap/Button";
 export default function PostList(props) {
     const [postList, setPostList] = useState([]);
 
-    useEffect(async () => {
+    useEffect( () => {
+        async function fetchData() {
         const request = ({
             url: process.env.REACT_APP_BASE_URI + '/post/getAll',
             method: 'GET',
@@ -28,7 +29,8 @@ export default function PostList(props) {
             )
             .then(result => {
                 setPostList(result);
-            })
+            })}
+        fetchData();
     }, [])
 
     const renderAvailableLinks = (postList) => {

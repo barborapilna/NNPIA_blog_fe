@@ -14,6 +14,7 @@ import {useAuth} from "./service/AuthContext";
 import Register from "./components/Register";
 import UserProfile from "./components/UserProfile";
 import UserForm from "./components/UserForm";
+import PrivateRoute from "./service/PrivateRoute";
 
 function App() {
     const {removeTokens} = useAuth()
@@ -36,18 +37,17 @@ function App() {
                         <Login loginMethod={setLoggedIn}/>
                     </Route>
 
-                    {isLoggedIn && <Route path="/comment" component={Comment}/> }
-                    {isLoggedIn && <Route path="/post-list" component={PostList}/>}
-                    {isLoggedIn && <Route path="/post/:postId" component={Post}/>}
-                    {isLoggedIn && <Route path="/add/post" component={PostForm}/>}
-                    {isLoggedIn && <Route path="/response" component={ResponsePage}/>}
-                    {isLoggedIn && <Route path="/user-profile" component={UserProfile}/>}
-                    {isLoggedIn && <Route path="/edit/user" component={UserForm}/>}
+                    <PrivateRoute path="/comment" component={Comment}/>
+                    <PrivateRoute path="/post-list" component={PostList}/>
+                    <PrivateRoute path="/post/:postId" component={Post}/>
+                    <PrivateRoute path="/add/post" component={PostForm}/>
+                    <PrivateRoute path="/response" component={ResponsePage}/>
+                    <PrivateRoute path="/user-profile" component={UserProfile}/>
+                    <PrivateRoute path="/edit/user" component={UserForm}/>
 
                     <Route path="/about" component={About}/>
                     <Route path="/register" component={Register}/>
                     <Route path="/" component={Home}/>
-
 
                 </Switch>
             </div>

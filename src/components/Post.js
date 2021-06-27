@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import Comment from "./Comment";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
@@ -32,36 +32,12 @@ function FormComment({addComment}) {
 }
 
 export default function Post(props) {
+    const postId = props.location.state.postID;
     const [post, setPost] = useState([]);
     const [comments, setComments] = useState([]);
 
-    useEffect(async () => {
-        const postId = props.location.state.postID;
 
-        const requestPost = ({
-            url: process.env.REACT_APP_BASE_URI + '/post/' + postId,
-            method: 'GET',
-            headers: new Headers({
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('tokens')
-            })
-        });
-
-        await fetch(requestPost.url, requestPost)
-            .then(response =>
-                response.json().then(json => {
-                    if (!response.ok) {
-                        return Promise.reject(json)
-                    }
-
-                    return json
-                })
-            )
-            .then(result => {
-                setPost(result);
-            });
-
-
+    const getComments = useCallback(async () => {
         const requestComments = ({
             url: process.env.REACT_APP_BASE_URI + '/comments/' + postId,
             method: 'GET',
@@ -82,10 +58,38 @@ export default function Post(props) {
                 })
             )
             .then(result => {
-                setComments(result)
+                setComments(result);
             })
+    },[postId]);
 
-    }, []);
+    useEffect(() => {
+        async function fetchData() {
+            const requestPost = ({
+                url: process.env.REACT_APP_BASE_URI + '/post/' + postId,
+                method: 'GET',
+                headers: new Headers({
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('tokens')
+                })
+            });
+
+            await fetch(requestPost.url, requestPost)
+                .then(response =>
+                    response.json().then(json => {
+                        if (!response.ok) {
+                            return Promise.reject(json)
+                        }
+
+                        return json
+                    })
+                )
+                .then(result => {
+                    setPost(result);
+                });
+        }
+        fetchData();
+        getComments();
+    }, [getComments, postId]);
 
     const renderComments = (comments) => {
         const commentsList = [];
@@ -186,9 +190,8 @@ export default function Post(props) {
                     })
                 )
                 .then(result => {
-                    // const myComments = [...comments, {id: 500, body:text, userName: "barca"}];
-                    // setComments(myComments);
-                    window.location.reload();
+                    getComments();
+                    // window.location.reload();
                 })
         }
     };
