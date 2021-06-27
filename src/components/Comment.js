@@ -1,6 +1,6 @@
-import React, {useEffect} from "react";
+import React from "react";
 import jwt_decode from "jwt-decode";
-import {Button, Card, Form} from 'react-bootstrap';
+import {Button, Card} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Comment = ({props, comment}) => {
@@ -31,7 +31,7 @@ const Comment = ({props, comment}) => {
         };
 
         const request = ({
-            url: 'http://localhost:8080/comment/' + id,
+            url: process.env.REACT_APP_BASE_URI + '/comment/' + id,
             method: 'DELETE',
             headers: new Headers({
                 'Content-Type': 'application/json',

@@ -23,7 +23,7 @@ export default function Register(props) {
         };
 
         const request = ({
-            url: 'http://localhost:8080/registration',
+            url: process.env.REACT_APP_BASE_URI + '/registration',
             method: 'POST',
             headers: new Headers({
                 'Content-Type': 'application/json',

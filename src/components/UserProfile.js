@@ -8,7 +8,7 @@ export default function UserProfile(props) {
 
     useEffect(async () => {
         const request = ({
-            url: 'http://localhost:8080/user/' + jwt_decode(localStorage.getItem('tokens')).sub,
+            url: process.env.REACT_APP_BASE_URI + '/user/' + jwt_decode(localStorage.getItem('tokens')).sub,
             method: 'GET',
             headers: new Headers({
                 'Content-Type': 'application/json',

@@ -14,24 +14,24 @@ export default function MyNavbar(props) {
     const isLoggedIn = AuthService.isLoggedIn();
 
     navItems.push(<li className="nav-item">
-        <Nav.Link href="/home">Home</Nav.Link>
+        <Nav.Link href="/#/home">Home</Nav.Link>
     </li>);
 
     navItems.push(<li className="nav-item">
-        <Nav.Link href="/about">About</Nav.Link>
+        <Nav.Link href="/#/about">About</Nav.Link>
     </li>);
 
     if (!isLoggedIn) {
         navItems.push(<li className="nav-item">
-            <Nav.Link href="/login">Login</Nav.Link>
+            <Nav.Link href="/#/login">Login</Nav.Link>
         </li>);
 
         navItems.push(<li className="nav-item">
-            <Nav.Link href="/register">Register</Nav.Link>
+            <Nav.Link href="/#/register">Register</Nav.Link>
         </li>);
     } else {
         navItems.push(<li className="nav-item">
-            <Nav.Link href="/post-list">Posts</Nav.Link>
+            <Nav.Link href="/#/post-list">Posts</Nav.Link>
         </li>);
 
         navItems.push(<li className="nav-item">
@@ -41,7 +41,7 @@ export default function MyNavbar(props) {
         </li>);
 
         navItems.push(<li className="nav-item">
-            <Nav.Link href="/user-profile">My profile</Nav.Link>
+            <Nav.Link href="/#/user-profile">My profile</Nav.Link>
         </li>);
 
         navItems.push(<li className="nav-item">
@@ -52,7 +52,7 @@ export default function MyNavbar(props) {
     return (
         <div>
             <Navbar bg="dark" variant="dark">
-                <Navbar.Brand href="/home">My Blog</Navbar.Brand>
+                <Navbar.Brand href="/#/home">My Blog</Navbar.Brand>
                 <Nav className="mr-auto">
                     <ul className="nav">
                         {navItems}

@@ -12,11 +12,10 @@ export default function PostForm(props) {
 
     useEffect(async () => {
         setPostId(props.location.state.postID);
-        // alert(props.location.state.postID)
 
         if (props.location.state.postID !== -1){
             const request = ({
-                url: 'http://localhost:8080/post/' + props.location.state.postID,
+                url: process.env.REACT_APP_BASE_URI + '/post/' + props.location.state.postID,
                 method: 'GET',
                 headers: new Headers({
                     'Content-Type': 'application/json',
@@ -48,7 +47,7 @@ export default function PostForm(props) {
         };
 
         const request = ({
-            url: 'http://localhost:8080/post',
+            url: process.env.REACT_APP_BASE_URI + '/post',
             method:'POST',
             headers: new Headers({
                 'Content-Type': 'application/json',
@@ -85,7 +84,7 @@ export default function PostForm(props) {
         // alert(postId)
 
         const request = ({
-            url: 'http://localhost:8080/post/' + postId,
+            url: process.env.REACT_APP_BASE_URI + '/post/' + postId,
             method: 'PUT',
             headers: new Headers({
                 'Content-Type': 'application/json',

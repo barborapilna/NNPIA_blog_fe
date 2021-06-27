@@ -39,7 +39,7 @@ export default function Post(props) {
         const postId = props.location.state.postID;
 
         const requestPost = ({
-            url: 'http://localhost:8080/post/' + postId,
+            url: process.env.REACT_APP_BASE_URI + '/post/' + postId,
             method: 'GET',
             headers: new Headers({
                 'Content-Type': 'application/json',
@@ -63,7 +63,7 @@ export default function Post(props) {
 
 
         const requestComments = ({
-            url: 'http://localhost:8080/comments/' + postId,
+            url: process.env.REACT_APP_BASE_URI + '/comments/' + postId,
             method: 'GET',
             headers: new Headers({
                 'Content-Type': 'application/json',
@@ -126,7 +126,7 @@ export default function Post(props) {
         };
 
         const request = ({
-            url: 'http://localhost:8080/post/' + id,
+            url: process.env.REACT_APP_BASE_URI + '/post/' + id,
             method: 'DELETE',
             headers: new Headers({
                 'Content-Type': 'application/json',
@@ -166,7 +166,7 @@ export default function Post(props) {
             };
 
             const request = ({
-                url: 'http://localhost:8080/comment',
+                url: process.env.REACT_APP_BASE_URI + '/comment',
                 method: 'POST',
                 headers: new Headers({
                     'Content-Type': 'application/json',

@@ -16,7 +16,7 @@ export default function UserForm(props) {
         setUserId(props.location.state.userID);
 
         const request = ({
-            url: 'http://localhost:8080/user/' + jwt_decode(localStorage.getItem('tokens')).sub,
+            url: process.env.REACT_APP_BASE_URI + '/user/' + jwt_decode(localStorage.getItem('tokens')).sub,
             method: 'GET',
             headers: new Headers({
                 'Content-Type': 'application/json',
@@ -54,7 +54,7 @@ export default function UserForm(props) {
         // alert(postId)
 
         const request = ({
-            url: 'http://localhost:8080/user/' + userId,
+            url: process.env.REACT_APP_BASE_URI + '/user/' + userId,
             method: 'PUT',
             headers: new Headers({
                 'Content-Type': 'application/json',

@@ -1,7 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import axios from "axios";
-import {WEB_ADDRESS} from "../components/Constants";
-import {Link} from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
@@ -9,11 +6,9 @@ import Button from "react-bootstrap/Button";
 export default function PostList(props) {
     const [postList, setPostList] = useState([]);
 
-    // console.warn("RENDER!");
-
     useEffect(async () => {
         const request = ({
-            url: 'http://localhost:8080/post/getAll',
+            url: process.env.REACT_APP_BASE_URI + '/post/getAll',
             method: 'GET',
             headers: new Headers({
                 'Content-Type': 'application/json',
@@ -39,20 +34,15 @@ export default function PostList(props) {
     const renderAvailableLinks = (postList) => {
         const postLinks = [];
 
-        postList.map((post) => {
-            const {id, author, title, body}  = post;
+        postList.forEach((post) => {
+            const {id, title, body}  = post;
             postLinks.push(
                 <div>
                     <Card id={id} className="text-center">
                         <Card.Header>{title}</Card.Header>
-                        {/*<Card.Header>Author: {author}</Card.Header>*/}
                         <Card.Body>
-                            {/*<Card.Title>{title}</Card.Title>*/}
                             <Card.Text>{body.substring(0,500) + "..."}</Card.Text>
-                            {/*<Link className="nav-link" to={"/post/" + id}>*/}
-                                <Button variant="primary" onClick={() => openLink(id)}>Read</Button>
-                                {/*<Button variant="primary">Read</Button>*/}
-                            {/*</Link>*/}
+                            <Button variant="primary" onClick={() => openLink(id)}>Read</Button>
                         </Card.Body>
                     </Card>
                     <br/>

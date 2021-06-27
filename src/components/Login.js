@@ -15,14 +15,14 @@ export default function Login(props) {
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
-        data[name] = value
-        setData({...data})
+        data[name] = value;
+        setData({...data});
     };
 
     function postLogin(e) {
         e.preventDefault()
 
-        fetch(`http://localhost:8080/authenticate`,
+        fetch(process.env.REACT_APP_BASE_URI + '/authenticate',
             {
                 method: 'POST', // *GET, POST, PUT, DELETE, etc.
                 headers: {
@@ -68,7 +68,6 @@ export default function Login(props) {
                 </div>
                 <br/>
                 <Button variant="primary" type="submit">Login</Button>
-                {/*<button>Login</button>*/}
                 {isError}
             </form>
         </div>
