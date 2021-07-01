@@ -49,6 +49,8 @@ export default function Login(props) {
         return <Redirect to="/about"/>;
     }
 
+    // alert(process.env.REACT_APP_BASE_URI)
+
     return (
         <div>
             <br/>

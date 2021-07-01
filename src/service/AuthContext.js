@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useCallback} from "react";
 import {createContext, useContext, useEffect, useState} from 'react';
 import jwt_decode from "jwt-decode";
 
@@ -16,7 +16,7 @@ function AuthProvider({children}) {
         status: 'pending'
     })
 
-    const removeTokens = () => {
+    const removeTokens = useCallback(() => {
         localStorage.removeItem("tokens");
 
         setState({
@@ -24,12 +24,10 @@ function AuthProvider({children}) {
             error: null,
             user: null,
             token: authTokens,
-            setTokens,
-            removeTokens
         })
-    }
+    }, [authTokens]);
 
-    const setTokens = (data) => {
+    const setTokens = useCallback((data) => {
         localStorage.setItem("tokens", data);
         setAuthTokens(data);
         const user = getUser(data);
@@ -38,11 +36,9 @@ function AuthProvider({children}) {
                 error: null,
                 user: user,
                 token: data,
-                setTokens,
-                removeTokens
             }
         );
-    }
+    }, []);
 
     useEffect(() => {
         const user = getUser(localStorage.getItem("tokens"));
@@ -51,11 +47,11 @@ function AuthProvider({children}) {
                 error: null,
                 user: user,
                 token: localStorage.getItem("tokens"),
-                setTokens,
-                removeTokens
+                removeTokens,
+                setTokens
             }
         );
-    }, [setTokens, removeTokens])
+    }, [removeTokens, setTokens])
 
     return (
         <AuthContext.Provider value={state}>

@@ -24,6 +24,7 @@ function App() {
         setLoggedIn(false);
         removeTokens();
         history.push("/");
+        window.location.reload();
     };
 
     return (
